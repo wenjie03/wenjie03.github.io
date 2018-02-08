@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="utf-8">
+  
+  <title>javascript闭包 | 晴风无眠</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="以前看过好多文档，对于闭包不是很理解，再读《你不知道的JavaScript》上卷之后，终于明白了，感谢这本书，把自己理解的内容写下，以待学习与提升">
+<meta name="keywords" content="javascript,《你不知道的JavaScript》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="javascript闭包">
+<meta property="og:url" content="http://www.qingfengwumian.com/2016/05/22/javascript闭包/index.html">
+<meta property="og:site_name" content="晴风无眠">
+<meta property="og:description" content="以前看过好多文档，对于闭包不是很理解，再读《你不知道的JavaScript》上卷之后，终于明白了，感谢这本书，把自己理解的内容写下，以待学习与提升">
+<meta property="og:updated_time" content="2018-02-08T07:22:18.174Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="javascript闭包">
+<meta name="twitter:description" content="以前看过好多文档，对于闭包不是很理解，再读《你不知道的JavaScript》上卷之后，终于明白了，感谢这本书，把自己理解的内容写下，以待学习与提升">
+  
+    <link rel="alternative" href="/atom.xml" title="晴风无眠" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+      <link href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css" rel="stylesheet">
+  
+  
+      <link href="//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css" rel="stylesheet">
+  
+  
+      <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+      <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+  
+  <script src="//cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js"></script>
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false,
+          fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+          scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.0.9/scrollreveal.min.js"
+      }
+  </script>
+
+  
+      <script>
+          yiliaConfig.rootUrl = "/";
+      </script>
+  
+
+  
+  
+</head>
+<body>
+  <!--[if lt IE 9]>
+<style> body { background: orange !important;} div#container { display: none;} </style>
+<p id="ie-updater">
+    
+        IE6/7/8 aren't Supported<br>Please UPDATE your Browser!<br>
+    
+    <a href="//www.bing.com/search?q=Chrome" target="_blank">Chrome</a>, <a href="//www.bing.com/search?q=Firefox" target="_blank">Firefox</a><br>
+    Hexo Theme <a href="//github.com/MOxFIVE/hexo-theme-yelee" target="_blank">Yelee</a> by MOxFIVE
+</p>
+<![endif]-->
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">晴风无眠</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">一个爱学习、爱运动的男孩子</p>
+        
+                
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/liwenjie0313@163.com" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="http://weibo.com/5038925198/profile" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/wenjie03" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="http://www.jianshu.com/users/0addbb72bba5/latest_articles" title="简书"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javaScript/">javaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/《你不知道的JavaScript》/">《你不知道的JavaScript》</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/感悟/">感悟</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/杂文/">杂文</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">晴风无眠</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">晴风无眠</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">一个爱学习、爱运动的男孩子</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/liwenjie0313@163.com" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="http://weibo.com/5038925198/profile" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/wenjie03" title="GitHub"></a>
+                            
+                                <a class="fa 简书" target="_blank" href="http://www.jianshu.com/users/0addbb72bba5/latest_articles" title="简书"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-javascript闭包" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/05/22/javascript闭包/" class="article-date">
+      <time datetime="2016-05-22T07:16:17.000Z" itemprop="datePublished">2016-05-22</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      javascript闭包
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/术业专攻/">术业专攻</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《你不知道的JavaScript》/">《你不知道的JavaScript》</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <blockquote>
+<p>以前看过好多文档，对于闭包不是很理解，再读《你不知道的JavaScript》上卷之后，终于明白了，感谢这本书，把自己理解的内容写下，以待学习与提升</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="观察闭包"><a href="#观察闭包" class="headerlink" title="观察闭包"></a>观察闭包</h2><h5 id="一句话说明闭包"><a href="#一句话说明闭包" class="headerlink" title="一句话说明闭包"></a>一句话说明闭包</h5><blockquote>
+<p>当函数可以记住并访问所在的词法作用域时，就产生了闭包，即使函数是在当前词法作用域之外执行</p>
+</blockquote>
+<hr>
+<h5 id="这是闭包吗？"><a href="#这是闭包吗？" class="headerlink" title="这是闭包吗？"></a>这是闭包吗？</h5><p><code>function foo () {
+  var a = 2;
+  function bar () {
+    console.log(a); // 2
+  }
+  bar();
+}
+foo();</code></p>
+<blockquote>
+<p>技术上来讲，<em>也许是</em>；但根据前面的定义，<em>确切地说并不是</em><br>bar()对a的引用的方法是词法作用域的查找规则，而这些规则只是闭包的一部分。（但是非常重要的一部分！）</p>
+</blockquote>
+<h5 id="这才是闭包！！"><a href="#这才是闭包！！" class="headerlink" title="这才是闭包！！"></a>这才是闭包！！</h5><p><code>function foo () {
+  var a = 2;
+  function bar () {
+    console.log(a); 
+  }
+  return bar;
+}
+var baz = foo();
+baz();  // 2</code></p>
+<blockquote>
+<ul>
+<li>函数bar() 的词法作用域能够访问foo()的内部作用域，我们将bar()函数本身当作一个值类型进行传递。</li>
+<li>在这个例子中，<em>我们将bar所引用的函数对象本身当作返回值</em></li>
+<li>baz函数对象调用了内部的函数bar(); bar()在自己定义的词法作用域<em>以外</em>的地方执行</li>
+<li>foo()执行后，foo()的整个内部作用域都被销毁，而闭包的“神奇”之处正是可以阻止这件事情的发生，事实上内部作用域<strong>依然存在</strong>，因此没有被回收，bar()本身在使用这个内部作用域</li>
+<li>bar() 依然持有对该作用域的引用，而这个引用就叫作<strong>闭包</strong></li>
+</ul>
+</blockquote>
+<p><strong>当然，无论使用何种方式对函数类型的值<em>进行传递</em>，当函数在别处被调用时都可以观察到闭包</strong><br>如：<br><code>function foo () {
+  var a = 2;
+  function baz () {
+    console.log(a); //2
+  }
+  bar( baz );
+}
+function bar(fn){
+  fn(); // 这就是闭包！
+}</code></p>
+<blockquote>
+<ul>
+<li>把内部函数baz 传递给 bar，当调用这个内部函数时，它涵盖的 foo() 内部作用域的闭包就可以观察到了，因为它能够访问 a。</li>
+<li>无论通过何种手段将内部函数传递到所在的词法作用域以外，它都会持有原始定义作用域的引用，无论在何处执行这个函数都会使用闭包。</li>
+</ul>
+</blockquote>
+<h6 id="为了解释如何使用闭包，以上是人为地在结构上进行了修饰，但我们写过的代码中一定到处都是闭包的身影"><a href="#为了解释如何使用闭包，以上是人为地在结构上进行了修饰，但我们写过的代码中一定到处都是闭包的身影" class="headerlink" title="为了解释如何使用闭包，以上是人为地在结构上进行了修饰，但我们写过的代码中一定到处都是闭包的身影"></a>为了解释如何使用闭包，以上是人为地在结构上进行了修饰，但我们写过的代码中一定到处都是闭包的身影</h6><p>如：<br><code>function wait (message) {
+  setTimeout( function timer () {
+    console.log( message );
+  }, 1000 )
+}
+wait( &quot;Hello, closure!&quot; );</code></p>
+<p>将一个内部函数timer() 传递给 setTimeout()。 timer 具有涵盖 wait() 作用域的闭包，因此还保有对变量message 的引用<br>wait() 执行 1000 毫秒后，它的内部作用域并不会消失，timer 函数依然保有wait()作用域的闭包<br><em>这就是闭包</em></p>
+<p>如jQuery:<br><code>function setupBot( name, selector ) {
+  $( selector ).click( function activator() {
+    console.log(&quot;activating:&quot; + name);
+  })
+}
+setupBot(&#39;closure Bot 1&#39;, &#39;#bot_1&#39;);
+setupBot(&#39;closure Bot 2&#39;, &#39;#bot_2&#39;);</code><br><strong>这也是闭包</strong></p>
+<p>本质上无论何时何地，如果将函数当作第一级的值类型并到处传递，你就会看到闭包在这些函数中的应用，只要使用了回调函数，实际上就是在使用闭包</p>
+<h2 id="IIFE-模式"><a href="#IIFE-模式" class="headerlink" title="IIFE 模式"></a>IIFE 模式</h2><p>先看一段代码<br><code>var a = 2;
+(function IIFE(){
+  console.log( a );
+})()</code></p>
+<p>这段代码可以正常工作，但严格上来说它并不是闭包，<br><strong>为什么！</strong><br>因为函数并不是在它本身的词法作用域以外执行的，它在定义时所在的作用域中执行，<em>a 就通过普通的词法作用域查找而非闭包被发现的！！</em></p>
+<blockquote>
+<p>尽管IIFE本身并不是观察闭包的恰当例子，但它的确创建了闭包，并且也是最常用来创建可以被封闭起来的闭馆的工具，因此IIFE的确同作用域息息相关，即使本身并不会真的创建作用域。</p>
+</blockquote>
+<h3 id="循环与闭包"><a href="#循环与闭包" class="headerlink" title="循环与闭包"></a>循环与闭包</h3><p>先看下面的例子</p>
+<p><code>for (var i=1; i&lt;=5; i++) {
+  setTimeout( function timer () {
+    console.log( i );
+  }, i*1000);
+}</code></p>
+<p>正常情况下，我们希望这段代码分别输出数字1~5，每秒一次，每次一个。<br>但实际上，这段代码在运行时会以每秒一次的频率输出五次6.</p>
+<p><em>这是为什么?</em></p>
+<p>6是从哪里来的，这个循环的终止条件是i 不再&lt;=5。条件首次成立时i的值是6。输出显示的是i的最终值。</p>
+<p>延迟函数的回调会在循环结束时才执行，根据作用域的工作原理，实际情况是尽管循环中的五个函数是在各个迭代中分别定义的，但是他们都被封闭在一个共享的全局作用域中，因些实际上只有一个i，因此会每次都输出一个6出来，</p>
+<p>我们应该怎么做，才会每秒一次，每次一个数，分别是1~5呢？<br>如果在循环的过程中每个迭代都需要一个闭包作用域，会成功吗？<br>IIFE会通过声明并立即执行一个函数来创建作用域。那我们来试一下</p>
+<p><code>for (var i=1; i&lt;=5; i++) {
+  (function () {
+    setTimeout( function timer () {
+      console.log( i );
+    }, i*1000);
+  })();
+}</code></p>
+<p>这样能行吗？<strong>这样不行</strong><br>为什么呢？我们现在显然拥有更多的词法作用域了，的确每个延迟函数都会将IIFE在每次迭代中创建的作用域封闭起来，<em>如果作用域是空的</em> 那么仅仅将它们进行封闭是不够的，仔细看一下，我们的IIFE只是一个什么都没有的空作用域。它需要包含一点实质内容才能为我们所用。他需要有自己的变量，用来在每个迭代中储存i的值。</p>
+<p><code>for (var i=1; i&lt;=5; i++) {
+  (function (i) {
+    setTimeout( function timer () {
+      console.log( i );
+    }, i*1000);
+  })(i);
+}</code></p>
+<p>现在试试，好了吗？ <strong>好了</strong>，在迭代内使用IIFE会为每个迭代都生成一个新的作用域，虽然都是变量i，但每个变量i都是不一样的。每个迭代中都会含有一个具有正确值的变量供我们访问</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>观察模式是可以清晰的看出来闭包的，但是在实际写代码的时候，这种观察模式是很少用在实际的项目中，用到的都是IIFE或模块这类并没有明显的闭包，但实际上用到了闭包，需要我们多多的观察与思考，才会发现某中的函数记住并访问所在的词法作用域并在当前的词法作用域之外执行。</p>
+<blockquote>
+<ul>
+<li>本文选至<em>《你不知道的JavaScript》上卷</em>，并添加了一些个人想法。</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/05/22/javascript闭包/">javascript闭包</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">晴风无眠</a></p>
+        <p><span>发布时间:</span>2016-05-22, 15:16:17</p>
+        <p><span>最后更新:</span>2018-02-08, 15:22:18</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/05/22/javascript闭包/" title="javascript闭包">http://www.qingfengwumian.com/2016/05/22/javascript闭包/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.qingfengwumian.com/2016/05/22/javascript闭包/　　作者: 晴风无眠" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2018/02/08/123423/">
+                    应该写点什么呢
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/05/22/博客成立过程/">
+                    博客成立过程
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#观察闭包"><span class="toc-number">1.</span> <span class="toc-text">观察闭包</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#一句话说明闭包"><span class="toc-number">1.0.0.1.</span> <span class="toc-text">一句话说明闭包</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#这是闭包吗？"><span class="toc-number">1.0.0.2.</span> <span class="toc-text">这是闭包吗？</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#这才是闭包！！"><span class="toc-number">1.0.0.3.</span> <span class="toc-text">这才是闭包！！</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#为了解释如何使用闭包，以上是人为地在结构上进行了修饰，但我们写过的代码中一定到处都是闭包的身影"><span class="toc-number">1.0.0.3.1.</span> <span class="toc-text">为了解释如何使用闭包，以上是人为地在结构上进行了修饰，但我们写过的代码中一定到处都是闭包的身影</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IIFE-模式"><span class="toc-number">2.</span> <span class="toc-text">IIFE 模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#循环与闭包"><span class="toc-number">2.1.</span> <span class="toc-text">循环与闭包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"javascript闭包　| 晴风无眠　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section class="youyan" id="comments">
+  <div id="uyan_frame"></div>
+  <script src="http://v2.uyan.cc/code/uyan.js?uid=2100917"></script>
+</section>
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2018/02/08/123423/" title="上一篇: 应该写点什么呢">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/05/22/博客成立过程/" title="下一篇: 博客成立过程">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/02/08/123423/">应该写点什么呢</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/22/javascript闭包/">javascript闭包</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/22/博客成立过程/">博客成立过程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/19/js判断单击软键盘的“完成”按钮/">js判断单击软键盘的“完成”按钮</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/19/我在 web 领域工作越长时间/">我在 web 领域工作越长时间1</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/19/只有一行文字时两端对齐/">只有一行文字时两端对齐</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/05/18/markdown 格式输出/">markdown格式输出</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2018 晴风无眠
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >本站到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.1.22/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+
+    <script src="//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
