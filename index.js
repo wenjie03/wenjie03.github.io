@@ -386,6 +386,10 @@
 			let file = e.target.files[0],
 				reads = new FileReader();
 
+			console.log(e);
+
+			if ( !file ) return;
+
 			reads.onload = function () {
 				let canvas = document.createElement('canvas'),
 					ctx	   = canvas.getContext('2d'),
