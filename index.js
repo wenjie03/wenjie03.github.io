@@ -386,7 +386,7 @@
 			let file = e.target.files[0],
 				reads = new FileReader();
 
-			console.log(e);
+			console.log(e.target.files);
 
 			if ( !file ) return;
 
@@ -400,15 +400,17 @@
 				$pic.src = picSrc;
 				$pic.onload = function(){
 					let [width, height] = [this.width, this.height],
-						minLength = Math.min(width, height);
+						scaleSize;
+					canvas.width = 300;
+					canvas.height = 300;
 
-					canvas.width = minLength;
-					canvas.height = minLength;
 					
 					if ( width > height ) {
-						ctx.drawImage($pic, -(width - height) / 2, 0);
+						scaleSize = 300 / height * width;
+						ctx.drawImage($pic, -(scaleSize - 300) / 2, 0, scaleSize, 300);
 					} else {
-						ctx.drawImage($pic, 0, -(height - width) / 2);
+						scaleSize = 300 / width * height;
+						ctx.drawImage($pic, 0, -(scaleSize - 300) / 2, 300, scaleSize);
 					}
 
 					picSrc = canvas.toDataURL('image/jpeg');
